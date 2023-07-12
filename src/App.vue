@@ -1,6 +1,6 @@
 <template>
   <div class="mx-auto max-w-4xl px-4 mt-8">
-    <div v-if="isLoading">Loading the quiz...</div>
+    <div v-if="isLoading" class="text-amber-400 text-2xl font-bold">Loading the quiz...</div>
     <div v-else>
       <!-- Progress -->
       <div class="w-full bg-blue-500 h-4" v-if="questionsAnswered < quiz.length">
