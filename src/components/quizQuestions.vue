@@ -10,7 +10,7 @@
       <div class="mb-4">
         <div class="text-2xl font-bold" v-html="quizItem.question"></div>
       </div>
-      <div class="grid grid-cols-2 gap-4">
+      <div class="grid gap-4">
         <div
           class="bg-blue-500 rounded-lg py-4 px-6 text-white text-center font-bold cursor-pointer hover:bg-blue-600"
           v-for="answer in quizItem.answers"

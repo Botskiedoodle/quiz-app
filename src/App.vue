@@ -18,13 +18,14 @@
         ></div>
       </div>
       <div>
-        <quiz-questions
-          v-if="questionsAnswered < quiz.length"
-          :quiz="quiz"
-          @handle-answer-picked="handleAnswerPicked($event)"
-          :questions-answered="questionsAnswered"
-        />
-
+        <div v-if="questionsAnswered < quiz.length">
+          <!-- <side-bar /> -->
+          <quiz-questions
+            :quiz="quiz"
+            @handle-answer-picked="handleAnswerPicked($event)"
+            :questions-answered="questionsAnswered"
+          />
+        </div>
         <quiz-result
           v-else
           :quiz="quiz"
@@ -39,6 +40,7 @@
 <script setup>
 import QuizQuestions from './components/quizQuestions.vue'
 import QuizResult from './components/quizResult.vue'
+import SideBar from './components/sideBar.vue'
 import axios from 'axios'
 import {ref} from 'vue'
 const questionsAnswered = ref(0)
@@ -60,11 +62,11 @@ const quiz = ref([])
 const getQuiz = async () => {
  isLoading.value = true
  try {
-  await axios.get('https://opentdb.com/api.php?amount=10&type=multiple')
+  await axios.get('https://opentdb.com/api.php?amount=15&type=multiple&difficulty=easy')
   .then((res) => {
     let quizResponse = res.data.results
     quizResponse.forEach((question) => {
-      question.answers = randomizeAnswers(question.correct_answer, question.incorrect_answers)
+      question.answers = randomizedAnswers(question.correct_answer, question.incorrect_answers)
     })
     quiz.value = [...quizResponse]
     isLoading.value = false
@@ -78,7 +80,7 @@ const getQuiz = async () => {
   // compare the answer to the correct answer
 }
 
-const randomizeAnswers = (correctAnswer, incorrectAnswers) => {
+const randomizedAnswers = (correctAnswer, incorrectAnswers) => {
   let incorrect_answers = incorrectAnswers
   let correct_answer = correctAnswer
   let randomIndex = Math.floor(Math.random() * (incorrect_answers.length + 1));

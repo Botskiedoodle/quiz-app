@@ -68,13 +68,13 @@ const resetQuiz = () => {
 const resultMessage = computed(()=>{
   let message = ''
   if (props.totalCorrectAnswer === 0 ) {
-    message = 'Anyone there? Hello? Knock Knock.'
+    message = '(ノ_<。).'
   } else if (props.totalCorrectAnswer > 0 && props.totalCorrectAnswer < 5) {
-    message = 'Try harder! Dumbass.'
+    message = 'Try harder!'
   } else if (props.totalCorrectAnswer > 6 && props.totalCorrectAnswer < 10) {
-    message = 'Nice try. Getting there! Nerd.'
+    message = 'Nice try. Getting there!'
   } else if (props.totalCorrectAnswer == 10) {
-    message = 'Woah! Goodjob! Nobody likes a know-it-all.'
+    message = 'Woah! Goodjob! ٩(◕‿◕｡)۶ '
   }
   return message
 })
