@@ -6,13 +6,11 @@
       out of
       <span class="font-bold">{{ props.quiz.length }}!</span>
     </div>
-
-    <div class="font-bold m-4 text-2xl">{{ resultMessage }}</div>
-
+    <div class="font-bold m-4 text-2xl text-white">{{ resultMessage }}</div>
     <div>
-      <span class="font-bold m-4">Summary of your result:</span>
+      <span class="font-bold m-4 text-white">Summary of your result:</span>
 
-      <div v-for="(quizItem, quizIndex) in props.quiz" :key="quizItem.index" class="m-4">
+      <div v-for="(quizItem, quizIndex) in props.quiz" :key="quizItem.index" class="m-4 text-white">
         <div class="mb-2">{{ quizIndex + 1 }}. Question: <span v-html="quizItem.question" /></div>
         <div class="mb-2">Correct Answer: <span v-html="quizItem.correct_answer" /></div>
         <div class="mb-2">
@@ -73,7 +71,7 @@ const resultMessage = computed(()=>{
     message = 'Try harder!'
   } else if (props.totalCorrectAnswer > 6 && props.totalCorrectAnswer < 10) {
     message = 'Nice try. Getting there!'
-  } else if (props.totalCorrectAnswer == 10) {
+  } else if (props.totalCorrectAnswer >= 10) {
     message = 'Woah! Goodjob! ٩(◕‿◕｡)۶ '
   }
   return message

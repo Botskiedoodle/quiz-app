@@ -4,31 +4,19 @@
       v-for="(prize, prizeIndex) in prizeList"
       :key="prize.id"
       class="font-bold text-2xl"
-      :class="prizeColors(prizeIndex)"
+      :class="`${prizeColors(prizeIndex)} ${isActive(prizeIndex)}`"
     >
-      <span>
+      <span class="mr-4">
         {{ 15 - prizeIndex }}
       </span>
       <span>
-        {{ `$ ${prize}` }}
+        {{ `$${prize}` }}
       </span>
     </div>
   </div>
 </template>
 <script setup>
-import {ref, defineProps, computed} from 'vue'
-
-const props = defineProps({
-  activeLevel: {
-    type: String,
-    default: '0'
-  }
-})
-
-const prizeColors = (prizeIndex) =>{
- return prizeIndex % 5 == 0 ? 'text-white' : 'text-amber-400'
-}
-
+import {ref, defineProps} from 'vue'
 const prizeList = ref(
   [
     '1 MILLION',
@@ -48,4 +36,23 @@ const prizeList = ref(
     '500'
   ]
 )
+// prizeList.value.reverse()
+
+const props = defineProps({
+  questionsAnsweredReverse: {
+    type: Number,
+    default: 0
+  }
+})
+
+const isActive = (prizeIndex) => {
+// console.log(props.questionsAnsweredReverse);
+  return props.questionsAnsweredReverse !== prizeIndex || 'bg-zinc-600 rounded-lg' 
+}
+
+const prizeColors = (prizeIndex) =>{
+ return prizeIndex % 5 == 0 ? 'text-white' : 'text-amber-400 '
+}
+
+
 </script>
