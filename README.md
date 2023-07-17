@@ -1,35 +1,18 @@
-# quiz-app
+# Simple quiz app
 
-This template should help get you started developing with Vue 3 in Vite.
+## A quiz app made with vue 3.
+I made two versions which behaves differently. 
 
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+This application is created to demonstrate my fundamentals in Vue 3, JavaScript and Tailwind. 
+In this application, I used vue technologies such as
+- components
+- props
+- slots
+- store (pinia)
+- conditional rendering (v-if / v-show)
+- event handlers
+- emits
+- list rendering (v-for)
+- ref, reactive
+- computed properties
+- dynamic styling 
