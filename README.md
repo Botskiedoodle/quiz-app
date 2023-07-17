@@ -2,6 +2,7 @@
 
 ## A quiz app made with vue 3.
 I made two versions which behaves differently. 
+I didn't utilize any of the lifecycle hooks.
 
 This application is created to demonstrate my fundamentals in Vue 3, JavaScript and Tailwind. 
 In this application, I used vue technologies such as
