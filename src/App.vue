@@ -2,7 +2,7 @@
   <div class="mx-auto max-w-4xl px-4 mt-8">
     <div v-if="isLoading" class="text-amber-400 text-2xl font-bold">Loading the quiz...</div>
     <div v-else>
-      <user-lives />
+      <user-lives v-show="!endQuiz" />
       <!-- Progress
       <div class="w-full bg-blue-500 h-4" v-if="questionsAnswered < quiz.length">
         <div
@@ -27,7 +27,9 @@
             :questions-answered="questionsAnswered"
           />
         </div>
-        <quiz-outcome v-else :last-question-details="quizOutcome" @reset-quiz="resetQuiz" />
+        <quiz-outcome v-else :last-question-details="quizOutcome" @reset-quiz="resetQuiz">
+          <template #prize> </template>
+        </quiz-outcome>
       </div>
     </div>
   </div>
@@ -45,12 +47,8 @@ const initializeLives = () => {
   constestantStore.lives = 3
 }
 
-
 import axios from 'axios'
 import {ref ,reactive} from 'vue'
-
-
-
 
 const questionsAnswered = ref(0)
 const totalCorrectAnswer = ref(0)
@@ -71,7 +69,6 @@ const handleAnswerPicked = ({correctAnswer, pickedAnswer, question }) => {
   if(pickedAnswer == correctAnswer)
   {
     totalCorrectAnswer.value++
-
     questionsAnsweredReverse.value--
   } else {
     constestantStore.subtractLife()

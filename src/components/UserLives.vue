@@ -1,5 +1,5 @@
 <template>
-  <div class="text-white font-bold text-2xl">
+  <div class="text-white font-bold text-2xl animate">
     Lives:
     <span v-for="life in constestantStore.lives" :key="life.id"
       ><img src="../assets/heart.png" alt="" class="w-10 mr-2" style="display: inline"
