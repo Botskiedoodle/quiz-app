@@ -16,27 +16,9 @@
   </div>
 </template>
 <script setup>
-import {ref, defineProps} from 'vue'
-const prizeList = ref(
-  [
-    '1 MILLION',
-    '500,000',
-    '250,000',
-    '150,000',
-    '75,000',
-    '50,000',
-    '25,000',
-    '15,000',
-    '10,000',
-    '7,500',
-    '5,000',
-    '3,000',
-    '2,000',
-    '1,000',
-    '500'
-  ]
-)
-// prizeList.value.reverse()
+import {defineProps} from 'vue'
+import { prizeList } from '@/data/prizeList';
+
 
 const props = defineProps({
   questionsAnsweredReverse: {

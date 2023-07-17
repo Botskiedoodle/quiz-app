@@ -1,6 +1,6 @@
 <template>
   <div class="mx-auto max-w-4xl px-4 mt-8">
-    <div v-if="isLoading" class="text-amber-400 text-2xl font-bold">Loading the quiz...</div>
+    <spin-loader v-if="isLoading" />
     <div v-else>
       <user-lives v-show="!endQuiz" />
       <!-- Progress
@@ -28,7 +28,14 @@
           />
         </div>
         <quiz-outcome v-else :last-question-details="quizOutcome" @reset-quiz="resetQuiz">
-          <template #prize> </template>
+          <template #prize>
+            Prize:
+            {{
+              totalCorrectAnswer == 0
+                ? `$ 0`
+                : `$ ${prizeList[questionsAnsweredReverse + totalCorrectAnswer]}`
+            }}
+          </template>
         </quiz-outcome>
       </div>
     </div>
@@ -36,10 +43,13 @@
 </template>
 <script setup>
 import QuizQuestions from '@/components/QuizQuestions.vue'
+import SpinLoader from '@/components/SpinLoader.vue'
 import QuizOutcome from '@/components/QuizOutcome.vue'
 // import QuizResult from '@/components/QuizResult.vue'
 import UserLives from '@/components/UserLives.vue'
 import SideBar from '@/components/SideBar.vue'
+import { prizeList } from '@/data/prizeList';
+
 
 import { useContenstantStore } from './stores/contestant'
 const constestantStore = useContenstantStore()
