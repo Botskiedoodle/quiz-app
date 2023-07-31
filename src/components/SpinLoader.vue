@@ -19,7 +19,7 @@
   margin-left: -2em;
   border-radius: 50%;
   border: 0.2em solid #ffbf00;
-  border-top-color: black;
+  border-top-color: white;
   animation: spinner 0.8s linear infinite;
 }
 

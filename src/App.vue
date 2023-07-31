@@ -23,8 +23,10 @@
           <side-bar :questions-answered-reverse="questionsAnsweredReverse" />
           <quiz-questions
             :quiz="quiz"
-            @handle-answer-picked="handleAnswerPicked($event)"
+            :is-answered="isAnswered"
             :questions-answered="questionsAnswered"
+            @handle-answer-picked="handleAnswerPicked($event)"
+            @next-question="handleNextQuestion"
           />
         </div>
         <quiz-outcome v-else :last-question-details="quizOutcome" @reset-quiz="resetQuiz">
@@ -74,14 +76,20 @@ const quizOutcome = reactive(
   }
 )
 
-
+const handleNextQuestion = () => {
+  questionsAnswered.value++
+  isAnswered.value = false
+}
+const isAnswered = ref(false)
 const handleAnswerPicked = ({correctAnswer, pickedAnswer, question }) => {
   if(pickedAnswer == correctAnswer)
   {
     totalCorrectAnswer.value++
+   
     questionsAnsweredReverse.value--
   } else {
     constestantStore.subtractLife()
+
     if(constestantStore.lives === 0){
       quizOutcome.question = question
       quizOutcome.correctAnswer = correctAnswer
@@ -89,7 +97,8 @@ const handleAnswerPicked = ({correctAnswer, pickedAnswer, question }) => {
       endQuiz.value = true
     }
   }
-  questionsAnswered.value++
+  // control this via emit of the next question
+  isAnswered.value = true
   userAnswers.value.push(pickedAnswer) // this might not be needed anymore
 }
 
@@ -124,6 +133,7 @@ const randomizedAnswers = (correctAnswer, incorrectAnswers) => {
 }
 
 const resetQuiz = () => {
+  isAnswered.value = false
   questionsAnswered.value = 0
   totalCorrectAnswer.value = 0
   userAnswers.value = []
@@ -131,7 +141,7 @@ const resetQuiz = () => {
   quizOutcome.correctAnswer = ''
   quizOutcome.pickedAnswer = ''
   endQuiz.value = false 
-  constestantStore.lives = 3
+  initializeLives()
   getQuiz()
 }
 

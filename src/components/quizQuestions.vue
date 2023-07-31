@@ -1,4 +1,4 @@
-<template>
+v<template>
   <div class="mt-8">
     <div
       class="bg-white rounded-lg p-8 shadow-md"
@@ -11,13 +11,30 @@
         <div class="text-2xl font-bold" v-html="quizItem.question"></div>
       </div>
       <div class="grid gap-4">
-        <div
-          class="bg-blue-500 rounded-lg py-4 px-6 text-white text-center font-bold cursor-pointer hover:bg-blue-600"
+        <button
+          class="rounded-lg py-4 px-6 text-white text-center font-bold select-none"
+          :class="
+            !isAnswered
+              ? 'bg-blue-500 hover:bg-blue-600 active:bg-blue-70'
+              : isAnswered && answer === answers.correctAnswer
+              ? 'bg-green-500'
+              : answer === answers.pickedAnswer
+              ? 'bg-red-500'
+              : 'bg-gray-500'
+          "
           v-for="answer in quizItem.answers"
-          :key="answer.id"
+          :key="answer"
+          :disabled="isAnswered"
           v-html="answer"
           @click="handleAnswerPicked(quizItem.correct_answer, answer, quizItem.question)"
-        ></div>
+        ></button>
+        <div
+          v-show="isAnswered"
+          class="bg-blue-400 rounded-lg py-4 px-6 text-white text-center font-bold cursor-pointer active:bg-green-700 hover:bg-green-600 select-none"
+          @click="nextQuestion"
+        >
+          Next
+        </div>
       </div>
     </div>
     <confirm-answer
@@ -28,11 +45,11 @@
 </template>
 <script setup>
 import {useModalStore} from '@/stores/modal.js'
-import {reactive} from 'vue'
+import {reactive, computed} from 'vue'
 import ConfirmAnswer from '@/components/ConfirmAnswer.vue'
 const modalStore = useModalStore()
+const emit = defineEmits(['handle-answer-picked', 'next-question'])
 
-const emit = defineEmits(['handle-answer-picked'])
 const answers = reactive({
   correctAnswer: '',
   pickedAnswer: '',
@@ -49,17 +66,35 @@ const props = defineProps({
     type: Number,
     required: true,
     default: () => 0
+  },
+  isAnswered: {
+    type: Boolean,
+    default: () => false
   }
 })
+
 // const userConfirmation = ref()
 const handleConfirmAnswer = (confirmation) => {
   if(confirmation) {
-    emit('handle-answer-picked', answers )
+    emit('handle-answer-picked', answers)
     modalStore.toggleVisibility();
   } else {
     modalStore.toggleVisibility();
   }
 };
+
+
+// change styling of correct answer
+const handleCorrectAnswerStyle = computed(()=>{
+  return 'bg-green-500'
+})
+// const handleCorrectAnswerStyle = () => {
+//   if (answers.correctAnswer === answers.pickedAnswer) {
+//     return 'bg-green-500'
+//   } else {
+//     return 'bg-red-500'
+//   }
+// }
 
 const handleAnswerPicked = (correctAnswer, pickedAnswer, question) => {
   modalStore.toggleVisibility();
@@ -68,4 +103,7 @@ const handleAnswerPicked = (correctAnswer, pickedAnswer, question) => {
   answers.question = question
 }
 
+const nextQuestion = () => {
+  emit('next-question')
+}
 </script>
