@@ -30,7 +30,7 @@ v<template>
         ></button>
         <div
           v-show="isAnswered"
-          class="bg-blue-400 rounded-lg py-4 px-6 text-white text-center font-bold cursor-pointer active:bg-green-700 hover:bg-green-600 select-none"
+          class="bg-blue-400 rounded-lg py-4 px-6 text-white text-center font-bold cursor-pointer active:bg-blue-700 hover:bg-blue-600 select-none"
           @click="nextQuestion"
         >
           Next

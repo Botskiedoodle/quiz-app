@@ -108,7 +108,7 @@ const quiz = ref([])
 const getQuiz = async () => {
  isLoading.value = true
  try {
-  await axios.get('https://opentdb.com/api.php?amount=15&type=multiple&difficulty=easy')
+  await axios.get('https://opentdb.com/api.php?amount=15')
   .then((res) => {
     let quizResponse = res.data.results
     quizResponse.forEach((question) => {
