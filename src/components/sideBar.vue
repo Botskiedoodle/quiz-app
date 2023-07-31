@@ -3,7 +3,7 @@
     <div
       v-for="(prize, prizeIndex) in prizeList"
       :key="prize.id"
-      class="font-bold text-2xl"
+      class="font-bold text-2xl px-2"
       :class="`${prizeColors(prizeIndex)} ${isActive(prizeIndex)}`"
     >
       <span class="mr-4">
