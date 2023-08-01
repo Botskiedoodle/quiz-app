@@ -16,10 +16,16 @@
 
     <div class="text-center">
       <button
-        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mb-8"
+        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mb-8 mx-2"
         @click="resetQuiz"
       >
-        Reset the quiz
+        Try again!
+      </button>
+      <button
+        class="bg-neutral-500 hover:bg-neutral-700 text-white font-bold py-2 px-4 rounded mb-8 mx-2"
+        @click="exitQuiz"
+      >
+        Exit to Main Menu
       </button>
     </div>
   </div>
@@ -31,10 +37,14 @@ const props = defineProps({
     default: ()=> {}
   }
 })
-const emit = defineEmits(['reset-quiz'])
+const emit = defineEmits(['reset-quiz', 'exit-quiz'])
 const resetQuiz = () => {
   // console.log('reset called');
   emit('reset-quiz')
+}
+
+const exitQuiz = () => {
+  emit('exit-quiz')
 }
 </script>
 <style lang="scss"></style>
