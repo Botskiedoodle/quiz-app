@@ -6,6 +6,7 @@ export const useContenstantStore = defineStore(
   // setup function
   () => {
     // state
+    const failedAttempts = ref(0)
     const lives = ref(0)
     //getters
     // const doubleCount = computed(() => count.value * 2)
@@ -16,6 +17,6 @@ export const useContenstantStore = defineStore(
     function subtractLife() {
       lives.value--
     }
-    return { lives, subtractLife }
+    return { lives, failedAttempts, subtractLife }
   }
 )

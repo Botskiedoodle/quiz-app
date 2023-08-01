@@ -62,6 +62,18 @@ import QuizQuestions from '@/components/QuizQuestions.vue'
 import SpinLoader from '@/components/SpinLoader.vue'
 import QuizOutcome from '@/components/QuizOutcome.vue'
 import SetQuiz from '@/components/SetQuiz.vue'
+import Confetti from '@/components/ConfettiEffect.vue'
+import JSConfetti from 'js-confetti'
+
+const jsConfetti = new JSConfetti()
+
+jsConfetti.addConfetti(
+  //   {
+  //   emojis: ['💩'],
+  // }
+)
+
+
 // import QuizResult from '@/components/QuizResult.vue'
 import UserLives from '@/components/UserLives.vue'
 import SideBar from '@/components/SideBar.vue'
@@ -70,6 +82,7 @@ import { prizeList } from '@/data/prizeList';
 
 import { useContenstantStore } from './stores/contestant'
 const constestantStore = useContenstantStore()
+console.log(constestantStore.failedAttempts)
 const initializeLives = () => {
   constestantStore.lives = 3
 }
