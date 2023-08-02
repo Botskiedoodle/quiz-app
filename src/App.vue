@@ -7,10 +7,8 @@
     <div v-else>
       <spin-loader v-if="isLoading" />
       <div v-else>
-        <div class="flex justify-center items-centers gap-32 animate-spin-in" v-if="!endQuiz">
-          <div>
-            <user-lives />
-          </div>
+        <div class="flex justify-center items-center flex-col animate-spin-in" v-if="!endQuiz">
+          <user-lives />
           <quiz-questions
             class="xl:w-[32em]"
             :quiz="quiz"
@@ -24,17 +22,11 @@
           class="animate-spin-in"
           v-else
           :last-question-details="quizOutcome"
+          :finished-quiz="finishedQuiz"
+          :quiz-difficulty="numberOfItems(quizDifficulty)"
           @reset-quiz="resetQuiz"
           @exit-quiz="toggleQuizStart"
         >
-          <template #prize>
-            Prize:
-            {{
-              totalCorrectAnswer == 0
-                ? `$ 0`
-                : `$ ${prizeList[questionsAnsweredReverse + totalCorrectAnswer]}`
-            }}
-          </template>
         </quiz-outcome>
       </div>
     </div>
@@ -47,44 +39,79 @@ import QuizQuestions from '@/components/QuizQuestions.vue'
 import SpinLoader from '@/components/SpinLoader.vue'
 import QuizOutcome from '@/components/QuizOutcome.vue'
 import SetQuiz from '@/components/SetQuiz.vue'
-
+import UserLives from '@/components/UserLives.vue'
 import { useContenstantStore } from './stores/contestant'
 const constestantStore = useContenstantStore()
 
 import JSConfetti from 'js-confetti'
 
 const jsConfetti = new JSConfetti()
-
 jsConfetti.addConfetti()
 
 
 const checkAchievements = () => {
 
 // check if user failed
-if(constestantStore.lives === 0){
+if(constestantStore.lives === 0 ){
   // check if the user did not answer a single correct answer
-  if(totalCorrectAnswer.value == 0) {
-    if( constestantStore.achievementBadges.zeroPointsOnSingleQuiz == 0){
-      constestantStore.achievementBadges.zeroPointsOnSingleQuiz = 1
-    }
-  jsConfetti.addConfetti(
+
+    if(totalCorrectAnswer.value == 0){
+      if(constestantStore.achievementBadges.zeroPointsOnSingleQuiz.flag == 0){
+        constestantStore.achievementBadges.zeroPointsOnSingleQuiz.flag  = 1
+      }
+      jsConfetti.addConfetti(
           {
           emojis: ['💩'],
         }
-      )
+      )  
     }
-}
 
 }
 
-// import QuizResult from '@/components/QuizResult.vue'
-import UserLives from '@/components/UserLives.vue'
-import SideBar from '@/components/SideBar.vue'
-import { prizeList } from '@/data/prizeList';
+// check for finished
+if(finishedQuiz.value) {
+  console.log(constestantStore.achievementBadges.finishTheQuizOnce.flag, 'store flag')
+  if(constestantStore.achievementBadges.finishTheQuizOnce.flag == 0){
+    constestantStore.achievementBadges.finishTheQuizOnce.flag = 1
+
+    jsConfetti.addConfetti()
+  }
+
+  // check if user did not lost any lives
+  if(constestantStore.lives === 3) {
+    if(constestantStore.achievementBadges.untouchable.flag == 0) {
+      constestantStore.achievementBadges.untouchable.flag = 1
+      jsConfetti.addConfetti()
+    }
+  }
+
+  // check for finishing the quiz on different difficulties
+  if(quizDifficulty.value == 'easy'){
+    if(constestantStore.achievementBadges.finishTheQuizOnEasy.flag  == 0) {
+      constestantStore.achievementBadges.finishTheQuizOnEasy.flag = 1
+      jsConfetti.addConfetti()
+    }
+  }
+
+  if(quizDifficulty.value == 'medium'){
+    if(constestantStore.achievementBadges.finishTheQuizOnMedium.flag == 0) {
+      constestantStore.achievementBadges.finishTheQuizOnMedium.flag = 1
+      jsConfetti.addConfetti()
+    }
+  }
+
+  if(quizDifficulty.value == 'hard'){
+    if(constestantStore.achievementBadges.finishTheQuizOnHard.flag == 0) {
+      constestantStore.achievementBadges.finishTheQuizOnHard.flag = 1
+      jsConfetti.addConfetti()
+    }
+  }
+
+}
+}
 
 
 
-// console.log(constestantStore.failedAttempts)
 
 
 const initializeLives = () => {
@@ -98,8 +125,9 @@ const questionsAnswered = ref(0)
 const totalCorrectAnswer = ref(0)
 const userAnswers = ref([])
 
-const questionsAnsweredReverse = ref(0)
+
 const endQuiz = ref(false)
+const finishedQuiz = ref(false)
 const quizOutcome = reactive(
   {
     question: '',
@@ -113,11 +141,12 @@ const handleNextQuestion = () => {
   isAnswered.value = false
 }
 const isAnswered = ref(false)
+
 const handleAnswerPicked = ({correctAnswer, pickedAnswer, question }) => {
+
   if(pickedAnswer == correctAnswer)
   {
     totalCorrectAnswer.value++
-    questionsAnsweredReverse.value--
   } else {
     constestantStore.subtractLife()
     if(constestantStore.lives === 0){
@@ -125,13 +154,21 @@ const handleAnswerPicked = ({correctAnswer, pickedAnswer, question }) => {
       quizOutcome.correctAnswer = correctAnswer
       quizOutcome.pickedAnswer = pickedAnswer
       constestantStore.tracker.failedAttempts++
+      checkAchievements()
       endQuiz.value = true
     }
-    checkAchievements()
+  
   }
-  // control this via emit of the next question
+
+  if(questionsAnswered.value === numberOfItems(quizDifficulty.value)-1){
+      finishedQuiz.value= true
+      endQuiz.value = true
+      checkAchievements()
+    }
+
+
   isAnswered.value = true
-  userAnswers.value.push(pickedAnswer) // this might not be needed anymore
+
 }
 
 // main quiz
@@ -145,24 +182,31 @@ const quizDifficulty = ref('10')
 
 
 const startQuiz = (difficultyLevel) => {
-
   quizDifficulty.value = difficultyLevel
   resetQuiz()
   initializeLives()
+}
+  // set difficulty via amount combined with actual difficulty
+const numberOfItems = (difficultyLevel) => {
+  return {
+    'easy': 5,
+    'medium': 10,
+    'hard': 15
+  }[difficultyLevel]
 }
 
 const getQuiz = async (difficultyLevel) => {
  isQuizStart.value = true
  isLoading.value = true
  try {
-  await axios.get(`${apiURL}&amount=${difficultyLevel}`)
+  await axios.get(`${apiURL}&amount=${numberOfItems(difficultyLevel)}&difficulty=${difficultyLevel}`)
   .then((res) => {
     let quizResponse = res.data.results
     quizResponse.forEach((question) => {
       question.answers = randomizedAnswers(question.correct_answer, question.incorrect_answers)
     })
     quiz.value = [...quizResponse]
-    questionsAnsweredReverse.value = quiz.value.length - 1
+    // questionsAnsweredReverse.value = quiz.value.length - 1
     isLoading.value = false
   })
  } 
@@ -192,6 +236,7 @@ const resetQuiz = () => {
   quizOutcome.pickedAnswer = ''
   endQuiz.value = false 
   isQuizStart.value  = true
+  finishedQuiz.value= false
   initializeLives()
 }
 

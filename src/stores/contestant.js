@@ -19,29 +19,48 @@ export const useContenstantStore = defineStore(
 
     const achievementBadges = ref(
       {
-        zeroPointsOnSingleQuiz: 0,
-        finishTheQuizOnce: 0,
+
+        zeroPointsOnSingleQuiz: {
+          flag: 1,
+          badgeImage: 'poop',
+          badgeTitle: 'Stinky',
+          description: 'Failed the quiz with 0 correct answers. Congratulations, stinky.'
+        },
+        finishTheQuizOnce: {
+          flag: 0,
+          badgeImage: 'finish',
+          badgeTitle: 'Finisher',
+          description: 'Completed the quiz once on whichever difficulty. Probably easy. 🙄'
+        },
         // fiftyFiftyMaster: 0,
-        untouchable: 0,
+        untouchable: {
+          flag: 0,
+          badgeImage: 'untouchable',
+          badgeTitle: 'Flawless',
+          description: 'Completed the quiz once with 3 hearts intact. Probably on easy difficulty. 🙄'
+        },
 
-        // point based
-        // get5PointsOn: {
-        //   Easy: 0,
-        //   Medium: 0,
-        //   Hard: 0
-        // },
-        // get10PointsOn: {
-        //   Easy: 0,
-        //   Medium: 0,
-        //   Hard: 0
-        // },
+        // finish the quiz on a difficulty
+        finishTheQuizOnEasy: {
+          flag: 0,
+          badgeImage: 'easy',
+          badgeTitle: 'WhizKid',
+          description: 'Completed the quiz once on easy difficulty. 🙄'
+        },
 
-        // finish the quiz
-        finishTheQuizOn: {
-          Easy: 0,
-          Medium: 0,
-          Hard: 0
-        }
+        finishTheQuizOnMedium: {
+          flag: 0,
+          badgeImage: 'medium',
+          badgeTitle: 'Savant',
+          description: 'Completed the quiz once on medium difficulty. Aight, you cool.'
+        },
+
+        finishTheQuizOnHard: {
+          flag: 0,
+          badgeImage: 'hard',
+          badgeTitle: 'Maestro',
+          description: 'Completed the quiz once on hard difficulty. Aye bro, calm down.'
+        },
       }
     )
 
