@@ -10,7 +10,6 @@
         <div class="flex justify-center items-centers gap-32 animate-spin-in" v-if="!endQuiz">
           <div>
             <user-lives />
-            <side-bar :questions-answered-reverse="questionsAnsweredReverse" />
           </div>
           <quiz-questions
             class="xl:w-[32em]"
@@ -40,24 +39,10 @@
       </div>
     </div>
   </div>
-
-  <!-- Progress
-      <div class="w-full bg-blue-500 h-4" v-if="questionsAnswered < quiz.length">
-        <div
-          :class="[
-            'bg-blue-700',
-            'h-full',
-            'transition-width',
-            'duration-300',
-            'ease-in-out',
-            'w-0',
-            'sm:w-full'
-          ]"
-          :style="{ width: `${(questionsAnswered / quiz.length) * 100}%` }"
-        ></div> 
-      </div>-->
 </template>
 <script setup>
+// remove side bar
+// show badge
 import QuizQuestions from '@/components/QuizQuestions.vue'
 import SpinLoader from '@/components/SpinLoader.vue'
 import QuizOutcome from '@/components/QuizOutcome.vue'
@@ -74,14 +59,22 @@ jsConfetti.addConfetti()
 
 
 const checkAchievements = () => {
-if(totalCorrectAnswer.value == 0) {
-  constestantStore.achievementBadges.zeroPointsOnSingleQuiz = 1
+
+// check if user failed
+if(constestantStore.lives === 0){
+  // check if the user did not answer a single correct answer
+  if(totalCorrectAnswer.value == 0) {
+    if( constestantStore.achievementBadges.zeroPointsOnSingleQuiz == 0){
+      constestantStore.achievementBadges.zeroPointsOnSingleQuiz = 1
+    }
   jsConfetti.addConfetti(
           {
           emojis: ['💩'],
         }
       )
     }
+}
+
 }
 
 // import QuizResult from '@/components/QuizResult.vue'
@@ -132,9 +125,9 @@ const handleAnswerPicked = ({correctAnswer, pickedAnswer, question }) => {
       quizOutcome.correctAnswer = correctAnswer
       quizOutcome.pickedAnswer = pickedAnswer
       constestantStore.tracker.failedAttempts++
-      checkAchievements()
       endQuiz.value = true
     }
+    checkAchievements()
   }
   // control this via emit of the next question
   isAnswered.value = true
@@ -144,14 +137,15 @@ const handleAnswerPicked = ({correctAnswer, pickedAnswer, question }) => {
 // main quiz
 const isLoading = ref(false)
 const quiz = ref([])
-const apiURL = 'https://opentdb.com/api.php?amount=15'
+const apiURL = 'https://opentdb.com/api.php?'
 
 const isQuizStart = ref(false)
-const quizDifficulty = ref('easy')
+const quizDifficulty = ref('10')
 
 
 
 const startQuiz = (difficultyLevel) => {
+
   quizDifficulty.value = difficultyLevel
   resetQuiz()
   initializeLives()
@@ -161,7 +155,7 @@ const getQuiz = async (difficultyLevel) => {
  isQuizStart.value = true
  isLoading.value = true
  try {
-  await axios.get(`${apiURL}&difficulty=${difficultyLevel}`)
+  await axios.get(`${apiURL}&amount=${difficultyLevel}`)
   .then((res) => {
     let quizResponse = res.data.results
     quizResponse.forEach((question) => {
@@ -186,6 +180,7 @@ const randomizedAnswers = (correctAnswer, incorrectAnswers) => {
   return incorrect_answers
 }
 
+// show badge before executing this
 const resetQuiz = () => {
   getQuiz(quizDifficulty.value)
   isAnswered.value = false
@@ -200,6 +195,7 @@ const resetQuiz = () => {
   initializeLives()
 }
 
+// show badge before executing this
 const toggleQuizStart = () => {
   isQuizStart.value  = false
 }

@@ -21,19 +21,20 @@ export const useContenstantStore = defineStore(
       {
         zeroPointsOnSingleQuiz: 0,
         finishTheQuizOnce: 0,
-        fiftyFiftyMaster: 0,
+        // fiftyFiftyMaster: 0,
+        untouchable: 0,
 
         // point based
-        get5PointsOn: {
-          Easy: 0,
-          Medium: 0,
-          Hard: 0
-        },
-        get10PointsOn: {
-          Easy: 0,
-          Medium: 0,
-          Hard: 0
-        },
+        // get5PointsOn: {
+        //   Easy: 0,
+        //   Medium: 0,
+        //   Hard: 0
+        // },
+        // get10PointsOn: {
+        //   Easy: 0,
+        //   Medium: 0,
+        //   Hard: 0
+        // },
 
         // finish the quiz
         finishTheQuizOn: {
