@@ -62,17 +62,27 @@ import QuizQuestions from '@/components/QuizQuestions.vue'
 import SpinLoader from '@/components/SpinLoader.vue'
 import QuizOutcome from '@/components/QuizOutcome.vue'
 import SetQuiz from '@/components/SetQuiz.vue'
-import Confetti from '@/components/ConfettiEffect.vue'
+
+import { useContenstantStore } from './stores/contestant'
+const constestantStore = useContenstantStore()
+
 import JSConfetti from 'js-confetti'
 
 const jsConfetti = new JSConfetti()
 
-jsConfetti.addConfetti(
-  //   {
-  //   emojis: ['💩'],
-  // }
-)
+jsConfetti.addConfetti()
 
+
+const checkAchievements = () => {
+if(totalCorrectAnswer.value == 0) {
+  constestantStore.achievementBadges.zeroPointsOnSingleQuiz = 1
+  jsConfetti.addConfetti(
+          {
+          emojis: ['💩'],
+        }
+      )
+    }
+}
 
 // import QuizResult from '@/components/QuizResult.vue'
 import UserLives from '@/components/UserLives.vue'
@@ -80,9 +90,10 @@ import SideBar from '@/components/SideBar.vue'
 import { prizeList } from '@/data/prizeList';
 
 
-import { useContenstantStore } from './stores/contestant'
-const constestantStore = useContenstantStore()
-console.log(constestantStore.failedAttempts)
+
+// console.log(constestantStore.failedAttempts)
+
+
 const initializeLives = () => {
   constestantStore.lives = 3
 }
@@ -120,6 +131,8 @@ const handleAnswerPicked = ({correctAnswer, pickedAnswer, question }) => {
       quizOutcome.question = question
       quizOutcome.correctAnswer = correctAnswer
       quizOutcome.pickedAnswer = pickedAnswer
+      constestantStore.tracker.failedAttempts++
+      checkAchievements()
       endQuiz.value = true
     }
   }
@@ -132,10 +145,15 @@ const handleAnswerPicked = ({correctAnswer, pickedAnswer, question }) => {
 const isLoading = ref(false)
 const quiz = ref([])
 const apiURL = 'https://opentdb.com/api.php?amount=15'
+
 const isQuizStart = ref(false)
+const quizDifficulty = ref('easy')
+
+
+
 const startQuiz = (difficultyLevel) => {
+  quizDifficulty.value = difficultyLevel
   resetQuiz()
-  getQuiz(difficultyLevel)
   initializeLives()
 }
 
@@ -169,6 +187,7 @@ const randomizedAnswers = (correctAnswer, incorrectAnswers) => {
 }
 
 const resetQuiz = () => {
+  getQuiz(quizDifficulty.value)
   isAnswered.value = false
   questionsAnswered.value = 0
   totalCorrectAnswer.value = 0
