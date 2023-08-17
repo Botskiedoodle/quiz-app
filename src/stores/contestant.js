@@ -19,9 +19,8 @@ export const useContenstantStore = defineStore(
 
     const achievementBadges = ref(
       {
-
         zeroPointsOnSingleQuiz: {
-          flag: 1,
+          flag: 0,
           badgeImage: 'poop',
           badgeTitle: 'Stinky',
           description: 'Failed the quiz with 0 correct answers. Congratulations, stinky.'
@@ -39,7 +38,6 @@ export const useContenstantStore = defineStore(
           badgeTitle: 'Flawless',
           description: 'Completed the quiz once with 3 hearts intact. Probably on easy difficulty. 🙄'
         },
-
         // finish the quiz on a difficulty
         finishTheQuizOnEasy: {
           flag: 0,
@@ -54,7 +52,6 @@ export const useContenstantStore = defineStore(
           badgeTitle: 'Savant',
           description: 'Completed the quiz once on medium difficulty. Aight, you cool.'
         },
-
         finishTheQuizOnHard: {
           flag: 0,
           badgeImage: 'hard',
@@ -63,9 +60,6 @@ export const useContenstantStore = defineStore(
         },
       }
     )
-
-
-
     const lives = ref(0)
     //getters
     // const doubleCount = computed(() => count.value * 2)
